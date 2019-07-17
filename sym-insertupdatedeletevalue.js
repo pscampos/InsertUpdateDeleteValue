@@ -28,9 +28,8 @@
         inject: ['$http', '$q'],
 	}
 
-	//var baseUrl = PV.ClientSettings.PIWebAPIUrl.replace(/\/?$/, '/'); //Example: "https://server.domain.com/piwebapi/";
-	var baseUrl = "https://piserver2017r2.brazilsouth.cloudapp.azure.com/piwebapi/"; // "https://piafserver2018.brazilsouth.cloudapp.azure.com/piwebapi/"
-	
+	var origin = window.location.origin;
+	var baseUrl = origin + "/piwebapi/"
 	
 	symbolVis.prototype.init = function(scope, elem, $http, $q) { 
 		this.onDataUpdate = dataUpdate;
@@ -45,10 +44,8 @@
 			
 			var dataValues = data.Data[0];
 			var i;
-			for (i=0;i<dataValues.Values.length;i++){
-				if(!isNaN(dataValues.Values[i].Value)){
-					dataValues.Values[i].Value = dataValues.Values[i].Value.replace('.','')
-				}					
+			for (i=0; i<dataValues.Values.length; i++){				
+					dataValues.Values[i].Value = dataValues.Values[i].Value.replace('.','').replace(',','.');							
 			}
 						
 			scope.Values = dataValues.Values;
@@ -71,25 +68,20 @@
 			var isAttribute = /af:/.test(namestream);
 			var path = isAttribute ? namestream.replace(/af\:(.*)/,'$1') : namestream.replace(/pi\:(\\\\.*)\?{1}.*(\\.*)\?{1}.*/,'$1$2');
 			var label = isAttribute ? path.match(/\w*\|.*$/)[0] : path.match(/\w+$/)[0];
-			var friendlyName = isAttribute ? label.match(/\|(.*$)/)[1] : label;
-			//var isPoint = isAttribute ? (namestream.Content.DataReferencePlugIn == "PI Point" ? true : false) : false;				
+			var friendlyName = isAttribute ? label.match(/\|(.*$)/)[1] : label;		
 						
-			//var getDataStreamURL = IsAttribute ? encodeURI(baseUrl + "attributes?path=" + path) : encodeURI(baseUrl + "points?path=" + path);
 			var getDataStreamURL = encodeURI(baseUrl + "attributes?path=" + path);
 			
-			//var dateTimeIso = new Date(datastream.Time).toISOString(); // 30/06/2019 17:00:01
 			var dateTimeSplit = datastream.Time.split(' ');
 			var dateSplit = dateTimeSplit[0].split('/');
 			var timeSplit = dateTimeSplit[1].split(':');
 			var dateTimeString = new Date(dateSplit[2],dateSplit[1]-1,dateSplit[0],timeSplit[0],timeSplit[1],timeSplit[2])
-			//var dateTimeString = new Date()
-			
+						
 			var data = {
                         "Timestamp": dateTimeString.toISOString(),
-                        "Value": datastream.Value
+                        "Value": datastream.Value.replace(',','.')
 					};
 			
-			//var method = isPoint ? "POST" : "PUT";
 			var method = "POST";
 			
 			body = {
@@ -122,11 +114,17 @@
 			scope.inputInEdition = true;
 			
 			var valuesLength = scope.Values.length;
-			var lastValue = scope.Values[valuesLength-1];
+			var values;
+			if(valuesLength>0){
+				values	= scope.Values[valuesLength-1];
+			}
+			else{
+				values = {};
+			}
 			
 			var localeDate = new Date();
 			
-			if(lastValue.New == undefined ){
+			if(values.New == undefined ){
 				scope.Values.push({'Value':"",
 								   'Time':localeDate.toLocaleString(),
 								   'New':true
@@ -138,12 +136,7 @@
 		
 		scope.inputClick = function(index){
 			scope.inputInEdition = true;
-		};
-	   
-		//scope.inputChange = function(index,value){
-		//	scope.Values[index].Value = value;
-		//};
-	   
+		};	   	   
 	};
 
 	PV.symbolCatalog.register(definition); 

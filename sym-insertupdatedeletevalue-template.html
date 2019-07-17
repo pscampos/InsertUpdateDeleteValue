@@ -1,75 +1,89 @@
 <div ng-style="{color: config.TextColor}">
-	<div class="row">
-		<div style="display: inline-block">
-			<h2 style="display: inline-block"> {{Label}} {{Units}} <h2>
-		</div>
-		<div style="display: inline-block">
-			<div style="display: inline-block">
-					<button 
-					ng-style="{ 'background-color': '#4CAF50',
-							  'border': 'none',
-							  'color': 'white',
-							  'padding': '15px 25px',
-							  'text-align': 'center',
-							  'font-size': '16px',
-							  'cursor': 'pointer',}"
-					ng-click="newValue()">New</button>
-			</div>
-		</div>
-	</div>
-	<div ng-repeat='item in Values' class="row">
-		<div style="display: inline-block">
-			<div style="display: inline-block">
-				<input type="text" 
-				value="{{item.Time}}"
-				ng-model="item.Time"
-				style="display: inline-block
-				  width: 100%;
-				  padding: 12px 20px;
-				  margin: 8px 0;
-				  display: inline-block;
-				  border: 1px solid #ccc;
-				  border-radius: 4px;
-				  box-sizing: border-box;"
-				  ng-click="inputClick($index)"
-				  ng-disabled="!item.New">
-			</div>
-			<div style="display: inline-block">
-				<input type="text" 
-				value="{{item.Value}}"
-				ng-model="item.Value"
-				style="display: inline-block
-				  width: 100%;
-				  padding: 12px 20px;
-				  margin: 8px 0;
-				  display: inline-block;
-				  border: 1px solid #ccc;
-				  border-radius: 4px;
-				  box-sizing: border-box;"
-				  ng-click="inputClick($index)">
-			</div>
-		</div>
-		<div style="display: inline-block">		
-			<button 
-			ng-style="{ 'background-color': '#4CAF50',
-					  'border': 'none',
-					  'color': 'white',
-					  'padding': '15px 25px',
-					  'text-align': 'center',
-					  'font-size': '16px',
-					  'cursor': 'pointer',}"
-			ng-click="insertUpdateDeleteValue($index,'InsertOrUpdate')">Save</button>
-		</div>
-		<div style="display: inline-block">
-			<button 
-			ng-style="{ 'background-color': '#4CAF50',
-					  'border': 'none',
-					  'color': 'white',
-					  'padding': '15px 25px',
-					  'text-align': 'center',
-					  'font-size': '16px',
-					  'cursor': 'pointer',}"
-			ng-click="insertUpdateDeleteValue($index,'Delete')">Delete</button>
-		</div>
-	</div>
+	<table>
+	<tr>
+		<th colspan="3">
+				<h2> {{Label}} {{Units}} <h2>
+		</th>
+		<th>
+
+						<button 
+						ng-style="{ 'background-color': '#4CAF50',
+								  'display': 'inline-block',
+								  'border': 'none',
+								  'color': 'white',
+								  'padding': '5px 5px',
+								  'margin': '5px 5px',
+								  'width': '50px',
+								  'text-align': 'center',
+								  'font-size': '16px',
+								  'cursor': 'pointer',}"
+						ng-click="newValue()">New</button>
+
+		</th>
+	</tr>
+	<tr ng-repeat='item in Values'>
+		<td>
+
+					<input type="text" 
+					value="{{item.Time}}"
+					ng-model="item.Time"
+					style="display: inline-block;
+					  width: 150px;
+					  padding: 5px 5px;
+					  margin: 5px 5px;
+					  display: inline-block;
+					  border: 1px solid #ccc;
+					  border-radius: 4px;
+					  box-sizing: border-box;"
+					  ng-click="inputClick($index)"
+					  ng-disabled="!item.New">
+		</td>
+		<td>
+					<input type="text" 
+					value="{{item.Value}}"
+					ng-model="item.Value"
+					style="display: inline-block;
+					  width: 100px;
+					  padding: 5px 5px;
+					  margin: 5px 5px;
+					  display: inline-block;
+					  border: 1px solid #ccc;
+					  border-radius: 4px;
+					  box-sizing: border-box;"
+					  ng-click="inputClick($index)">
+
+		</td>
+		<td>
+			
+				<button 
+				ng-style="{ 'background-color': '#4CAF50',
+						  'display': 'inline-block',
+						  'border': 'none',
+						  'color': 'white',
+						  'padding': '5px 5px',
+						  'margin': '5px 5px',
+						  'width': '50px',
+						  'text-align': 'center',
+						  'font-size': '16px',
+						  'cursor': 'pointer',}"
+				ng-click="insertUpdateDeleteValue($index,'InsertOrUpdate')">Save</button>
+
+		</td>
+		<td>
+				<button 
+				ng-style="{ 'background-color': '#4CAF50',
+						  'display': 'inline-block',
+						  'border': 'none',
+						  'color': 'white',
+						  'padding': '5px 5px',
+						  'margin': '5px 5px',
+						  'width': '50px',
+						  'text-align': 'center',
+						  'font-size': '16px',
+						  'cursor': 'pointer',}"
+				ng-click="insertUpdateDeleteValue($index,'Delete')">Delete</button>
+
+		</td>
+	</tr>
+	</table>
 </div>
