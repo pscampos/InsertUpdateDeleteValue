@@ -6,8 +6,10 @@
 
 	var definition = { 
 		typeName: "insertupdatedeletevalue",
+		displayName: 'Insert Update Delete Value',
 		visObjectType: symbolVis,
 		datasourceBehavior: PV.Extensibility.Enums.DatasourceBehaviors.Multiple,
+		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/insertupdatedeletevalue.png',
 		getDefaultConfig: function(){ 
 			return { 
 				DataShape: 'Timeseries',
