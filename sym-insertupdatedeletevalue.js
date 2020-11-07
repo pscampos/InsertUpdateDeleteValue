@@ -68,7 +68,8 @@
 			var body = {};
 			
 			var isAttribute = /af:/.test(namestream);
-			var path = isAttribute ? namestream.replace(/af\:(.*)/,'$1') : namestream.replace(/pi\:(\\\\.*)\?{1}.*(\\.*)\?{1}.*/,'$1$2');
+			var fullPath = isAttribute ? namestream.replace(/af\:(.*)/,'$1') : namestream.replace(/pi\:(\\\\.*)\?{1}.*(\\.*)\?{1}.*/,'$1$2');	
+			var path = fullPath.split("?")[0] + "|" + (fullPath.split("?")[1]).split("|")[1] 
 			var label = isAttribute ? path.match(/\w*\|.*$/)[0] : path.match(/\w+$/)[0];
 			var friendlyName = isAttribute ? label.match(/\|(.*$)/)[1] : label;		
 						
