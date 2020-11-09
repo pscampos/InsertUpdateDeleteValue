@@ -39,17 +39,23 @@
 		scope.inputInEdition = false;
 	
 		function dataUpdate(data){
-						
+			
+			var userLang;
+			userLang = navigator.language || navigator.userLanguage; 
+			
 			if(!data) return;
 			
 			if(scope.inputInEdition) return;
 			
 			var dataValues = data.Data[0];
 			var i;
-			for (i=0; i<dataValues.Values.length; i++){				
-					dataValues.Values[i].Value = dataValues.Values[i].Value.replace('.','').replace(',','.');							
+			
+			if(userLang == "pt" || userLang == "pt-BR"){
+				for (i=0; i<dataValues.Values.length; i++){				
+						dataValues.Values[i].Value = dataValues.Values[i].Value.replace('.','').replace(',','.');							
+				}
 			}
-						
+			
 			scope.Values = dataValues.Values;
 			
 			if(dataValues.Label){
@@ -62,28 +68,43 @@
 			
 			scope.inputInEdition = true;
 			
+			var userLang;
+			userLang = navigator.language || navigator.userLanguage; 
+			
 			var namestream = scope.symbol.DataSources[0];
 			var datastream = scope.Values[index];
 			
 			var body = {};
-			
+						
 			var isAttribute = /af:/.test(namestream);
 			var fullPath = isAttribute ? namestream.replace(/af\:(.*)/,'$1') : namestream.replace(/pi\:(\\\\.*)\?{1}.*(\\.*)\?{1}.*/,'$1$2');	
-			var path = fullPath.split("?")[0] + "|" + (fullPath.split("?")[1]).split("|")[1] 
+			var path = isAttribute ? fullPath.split("?")[0] + "|" + (fullPath.split("?")[1]).split("|")[1] : path = fullPath.split("?")[0];						
 			var label = isAttribute ? path.match(/\w*\|.*$/)[0] : path.match(/\w+$/)[0];
 			var friendlyName = isAttribute ? label.match(/\|(.*$)/)[1] : label;		
 						
 			var getDataStreamURL = encodeURI(baseUrl + "attributes?path=" + path);
 			
-			var dateTimeSplit = datastream.Time.split(' ');
-			var dateSplit = dateTimeSplit[0].split('/');
-			var timeSplit = dateTimeSplit[1].split(':');
-			var dateTimeString = new Date(dateSplit[2],dateSplit[1]-1,dateSplit[0],timeSplit[0],timeSplit[1],timeSplit[2])
-						
-			var data = {
-                        "Timestamp": dateTimeString.toISOString(),
-                        "Value": datastream.Value.replace(',','.')
-					};
+			var dateTimeString;
+			var data;
+			
+			if(userLang == "pt" || userLang == "pt-BR"){
+			
+				var dateTimeSplit = datastream.Time.split(' ');
+				var dateSplit = dateTimeSplit[0].split('/');
+				var timeSplit = dateTimeSplit[1].split(':');
+				dateTimeString = new Date(dateSplit[2],dateSplit[1]-1,dateSplit[0],timeSplit[0],timeSplit[1],timeSplit[2])
+							
+				data = {
+							"Timestamp": dateTimeString.toISOString(),
+							"Value": datastream.Value.replace(',','.')
+						};
+			}
+			else {
+				data = {
+							"Timestamp": datastream.Time,
+							"Value": datastream.Value
+						};
+			}
 			
 			var method = "POST";
 			
